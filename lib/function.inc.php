@@ -145,6 +145,24 @@ function timeToSecond($time = "") {
   return $sec;
 }
 
+function encryptPswdLogin($pswd) {
+  $ascii = 0;
+  $j = 0;
+  $cript = "";
+  $senha = sprintf("%-8.8s", $pswd);
+  $frase = "&%#!@$*+";
+
+  // calcula o caracter criptografado
+  for ($i = 0; $i < strlen($senha); $i++) {
+    $ascii = ord($senha[$i]) - 33;
+    $ascii += (($j++ % 3) * 3);
+    $ascii += ord($frase[$i]);
+    $cript .= chr($ascii);
+  }
+
+  return $cript;
+}
+
 /**
  * Formata o barcode de acordo com o cliente sendo utilizado
  *
@@ -210,8 +228,7 @@ function getPrdBarCode2Codigo($barcode, $db, $conf) {
                           WHERE prdbar.bits&1=1
                             AND prdbar.%s
                         )
-                       LIMIT 1",
-                  $where, $where22);
+                       LIMIT 1", $where, $where22);
   $result = $db->GetRow($SqlQuery);
 
   //echo $db->ErrorMsg();
@@ -245,4 +262,5 @@ function getPrdBarCode2Codigo($barcode, $db, $conf) {
 
   return false;
 }
+
 ?>
