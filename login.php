@@ -68,11 +68,14 @@ if ($res['resultado']['sucesso'] && isset($res['resultado']['dados']['funcionari
       $permissao = 0;
   }
 
-  $xml .= "<wsstatus>1</wsstatus>";
-  $xml .= sprintf("<funcionario><nome>%s</nome><email>%s</email><cargo>%s</cargo><loja>%s</loja><permissao>%s</permissao></funcionario>",
-          $funcionario['nome_funcionario'], $funcionario['email'], $funcionario['cargo'],
-          $funcionario['codigo_loja'], $permissao);
-
+  if($permissao == 0){
+    $xml .= "<wsstatus>0</wsstatus>";
+  }else{
+    $xml .= "<wsstatus>1</wsstatus>";
+    $xml .= sprintf("<funcionario><nome>%s</nome><email>%s</email><cargo>%s</cargo><loja>%s</loja><permissao>%s</permissao></funcionario>",
+            $funcionario['nome_funcionario'], $funcionario['email'], $funcionario['cargo'],
+            $funcionario['codigo_loja'], $permissao);
+  }
 } else {
   $xml .= "<wsstatus>0</wsstatus>";
 }
