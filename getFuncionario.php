@@ -8,7 +8,7 @@ require_once WService_DIR . 'nusoap/nusoap.php';
 
 /* obtendo algumas configuracoes do sistema */
 $conf = getConfig();
-$url_saciWSFuncionario = sprintf("%s/funcionariows.php", $conf['SISTEMA']['saciWS']);
+$ws = sprintf("%s/funcionariows.php", $conf['SISTEMA']['saciWS']);
 
 $wscallback = $_GET['wscallback'];
 $apelido = $_GET['usuario'];
@@ -24,7 +24,7 @@ if (!$adodb->IsConnected()) {
 }
 
 // url de ws
-$client = new nusoap_client($url_saciWSFuncionario);
+$client = new nusoap_client($ws);
 $client->useHTTPPersistentConnection();
 
 // serial do cliente
@@ -68,14 +68,9 @@ if ($res['resultado']['sucesso'] && isset($res['resultado']['dados']['funcionari
       $permissao = 0;
   }
 
-  if($permissao == 0){
-    $xml .= "<wsstatus>0</wsstatus>";
-  }else{
-    $xml .= "<wsstatus>1</wsstatus>";
-    $xml .= sprintf("<funcionario><nome>%s</nome><email>%s</email><cargo>%s</cargo><loja>%s</loja><permissao>%s</permissao></funcionario>",
-            $funcionario['nome_funcionario'], $funcionario['email'], $funcionario['cargo'],
-            $funcionario['codigo_loja'], $permissao);
-  }
+  $xml .= "<wsstatus>1</wsstatus>";
+  $xml .= sprintf("<funcionario><nome>%s</nome><email>%s</email><cargo>%s</cargo><loja>%s</loja><permissao>%s</permissao></funcionario>",
+          $funcionario['nome_funcionario'], $funcionario['email'], $funcionario['cargo'], $funcionario['codigo_loja'], $permissao);
 } else {
   $xml .= "<wsstatus>0</wsstatus>";
 }

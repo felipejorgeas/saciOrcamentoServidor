@@ -8,7 +8,7 @@ require_once WService_DIR . 'nusoap/nusoap.php';
 
 /* obtendo algumas configuracoes do sistema */
 $conf = getConfig();
-$url_saciWSPedido = sprintf("%s/pedidows.php", $conf['SISTEMA']['saciWS']);
+$ws = sprintf("%s/pedidows.php", $conf['SISTEMA']['saciWS']);
 $storeno = $conf["MISC"]['loja'];
 $pdvno = $conf["MISC"]['pdv'];
 $empno = $conf["MISC"]['funcionario'];
@@ -50,10 +50,7 @@ $orcamento = XML2Array::createArray($orcamento);
 $update = $orcamento['orcamentos']['orcamento']['codigo'];
 
 // url de ws
-$client = new nusoap_client($url_saciWSPedido);
-//$client->soap_defencoding = 'UTF-8';
-//$client->http_encoding='UTF-8';
-//$client->defencoding='UTF-8';
+$client = new nusoap_client($ws);
 $client->useHTTPPersistentConnection();
 
 // serial do cliente
