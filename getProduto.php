@@ -1,6 +1,7 @@
 <?php
 
 define('WService_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+require_once WService_DIR . 'lib/define.inc.php';
 require_once WService_DIR . 'lib/connect.inc.php';
 require_once WService_DIR . 'classes/Prd.class.php';
 

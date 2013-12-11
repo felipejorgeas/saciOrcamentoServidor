@@ -25,4 +25,16 @@ define('EMPTYPE_MOTORISTA',   17);
 define('EMPTYPE_AJUDANTE',    18);
 define('EMPTYPE_CONFERENTE',  19);
 
+// Status dos pedidos de Cliente 'status'
+define('EORDSTATUS_INCLUIDO', 0);
+define('EORDSTATUS_ORCAMENTO', 1);
+define('EORDSTATUS_RESERVADO', 2);
+define('EORDSTATUS_VENDIDO', 3);
+define('EORDSTATUS_EXPIRADO', 4);
+define('EORDSTATUS_CANCELADO', 5);
+define('EORDSTATUS_RESERVAB', 6);
+define('EORDSTATUS_TRANSITO', 7);
+define('EORDSTATUS_ENTREGAFUTURA', 8);
+define('EORDSTATUS_TODOS', 9);
+
 ?>

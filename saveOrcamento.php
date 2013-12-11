@@ -1,6 +1,7 @@
 <?php
 
 define('WService_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+require_once WService_DIR . 'lib/define.inc.php';
 require_once WService_DIR . 'lib/connect.inc.php';
 require_once WService_DIR . 'classes/Prd.class.php';
 require_once WService_DIR . 'classes/XML2Array.class.php';
@@ -41,7 +42,7 @@ if (!$adodb->IsConnected()) {
 $data = date("Ymd");
 $data_full = date("d/m/Y - H:i") . "hs";
 
-$status = 1; //1 - Orcamento
+$status = EORDSTATUS_ORCAMENTO;
 
 // converte o xml em array
 $orcamento = XML2Array::createArray($orcamento);
@@ -86,7 +87,8 @@ foreach ($codigos as $produto) {
 
 // verifica se ira atualizar algum orcamento e busca todos os seus dados
 if ($update > 0) {
-  $dados = sprintf("<dados><codigo_pedido>%s</codigo_pedido></dados>", $update);
+  $dados = sprintf("<dados><codigo_pedido>%s</codigo_pedido><situacao>%s</situacao></dados>",
+           $update, $status);
 
   // monta os parametros a serem enviados
   $params = array(
@@ -102,7 +104,7 @@ if ($update > 0) {
   $res = XML2Array::createArray($res);
 
   $produtos_existentes = "";
-  if ($res['resultado']['sucesso']) {
+  if (isset($res['resultado']['dados']['pedido'])) {
     // obtem os dados do orcamento a ser atualizado
     $data = $res['resultado']['dados']['pedido']['data_pedido'];
     $cliente = $res['resultado']['dados']['pedido']['codigo_cliente'];
@@ -179,7 +181,7 @@ $res = htmlspecialchars_decode("<resultado" . $result[1] . "resultado>");
 $res = XML2Array::createArray($res);
 
 $xml = "<wsresult>";
-if ($res['resultado']['sucesso']) {
+if (isset($res['resultado']['dados']['pedido'])) {
   $ordno = $res['resultado']['dados']['pedido']['codigo_pedido'];
 
   $xml .= "<wsstatus>1</wsstatus>";
