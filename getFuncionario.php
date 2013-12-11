@@ -43,10 +43,9 @@ $result = $client->call('listar', $params);
 
 $res = XML2Array::createArray($result);
 
-//echo '<pre>';
-//print_r($res['resultado']);
+$wsresult = "";
+$wsstatus = 0;
 
-$xml = "<wsresult>";
 if ($res['resultado']['sucesso'] && isset($res['resultado']['dados']['funcionario'])) {
   $funcionario = $res['resultado']['dados']['funcionario'];
 
@@ -68,17 +67,20 @@ if ($res['resultado']['sucesso'] && isset($res['resultado']['dados']['funcionari
       $permissao = 0;
   }
 
-  if($permissao == 0){
-    $xml .= "<wsstatus>0</wsstatus>";
-  }else{
-    $xml .= "<wsstatus>1</wsstatus>";
-    $xml .= sprintf("<funcionario><nome>%s</nome><email>%s</email><cargo>%s</cargo><loja>%s</loja><permissao>%s</permissao></funcionario>",
-            $funcionario['nome_funcionario'], $funcionario['email'], $funcionario['cargo'], $funcionario['codigo_loja'], $permissao);
+  if($permissao > 0){
+    $wsstatus = 1;
+    $wsresult = "<funcionario>";
+    $wsresult .= sprintf("<codigo>%s</codigo>", $funcionario['codigo_funcionario']);
+    $wsresult .= sprintf("<nome>%s</nome>", $funcionario['nome_funcionario']);
+    $wsresult .= sprintf("<email>%s</email>", $funcionario['email']);
+    $wsresult .= sprintf("<loja>%s</loja>", $funcionario['codigo_loja']);
+    $wsresult .= sprintf("<permissao>%s</permissao>", $permissao);
+    $wsresult .= "</funcionario>";
   }
-} else {
-  $xml .= "<wsstatus>0</wsstatus>";
 }
-$xml .= "</wsresult>";
+
+/* monta o xml de retorno */
+$xml = sprintf("<wsresult><wsstatus>%d</wsstatus>%s</wsresult>", $wsstatus, $wsresult);
 
 header('Access-Control-Allow-Origin: "*"');
 echo sprintf("%s('%s')", $wscallback, $xml);
