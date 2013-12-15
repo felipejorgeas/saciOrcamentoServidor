@@ -10,15 +10,6 @@ $conf = getConfig();
 $url_imgs = $conf['SISTEMA']['urlImgs'];
 $dir_imgs = $conf['SISTEMA']['dirImgs'];
 
-/* cria a conexao com o banco de dados */
-$adodb = EacConnect::getInstance();
-
-/* testa se a conexao foi bem sucedida */
-if (!$adodb->IsConnected()) {
-  echo $adodb->ErrorMsg();
-  exit(0);
-}
-
 /* variaveis recebidas na requisicao */
 $wscallback = $_GET['wscallback'];
 $barcode = $_GET['barcode'];
@@ -30,6 +21,15 @@ $dir_full = sprintf("%s/%s", $dir_imgs, $barcode);
 /* variaveis de controle para o criacao do xml de retorno */
 $existe_produto = false;
 $existe_imgs = false;
+
+/* cria a conexao com o banco de dados */
+$adodb = EacConnect::getInstance();
+
+/* testa se a conexao foi bem sucedida */
+if (!$adodb->IsConnected()) {
+  echo $adodb->ErrorMsg();
+  exit(0);
+}
 
 /* cria a tag contendo as informacoes sobre o produto */
 $xml_produto = "<produto>";
